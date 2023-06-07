@@ -15,8 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Blogs/Index', [
-
+        return Inertia::render('Posts/Index', [
+            'posts' => Post::with('user:id,name')->latest()->get()
         ]);
     }
 
@@ -47,8 +47,6 @@ class PostController extends Controller
         $request->user()->posts()->create($validated);
 
         return redirect()->route('posts.index');
-
-
 
     }
 
@@ -83,7 +81,17 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+
+        //validate
+        $validated = $request->validate([
+            'title' => 'required|string|max:100',
+            'body' => 'required|string|max:255'
+        ]);
+
+        $post->update($validated);
+
+        return redirect()->route('posts.index');
     }
 
     /**

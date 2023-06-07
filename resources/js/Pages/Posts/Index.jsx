@@ -1,11 +1,12 @@
 import InputError from '@/Components/InputError'
+import Post from '@/Components/Post'
 import PrimaryButton from '@/Components/PrimaryButton'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { useForm, Head } from '@inertiajs/react'
 
 import React from 'react'
 
- const Index = ({auth}) => {
+ const Index = ({auth, posts}) => {
   const {data, setData, post, processing, reset, errors} = useForm({
     title: '',
     body: ''
@@ -41,6 +42,14 @@ import React from 'react'
                         Save
                 </PrimaryButton>
             </form>
+            <div className='mt-6 bg-white shadow-sm rounded-ls divide-y'>
+              {
+                posts.map( post => 
+                  <Post key={post.id} post={post}></Post>  
+                )
+              }
+
+            </div>
         </div>
     </AuthenticatedLayout>
   )
